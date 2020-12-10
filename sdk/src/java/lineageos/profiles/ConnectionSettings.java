@@ -32,6 +32,7 @@ import android.provider.Settings;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import com.android.internal.telephony.RILConstants;
 
@@ -65,6 +66,7 @@ public final class ConnectionSettings implements Parcelable {
     private int mValue;
     private boolean mOverride;
     private boolean mDirty;
+    private static final String TAG = "ConnectionSettings";
 
     /**
      * For use with {@link #PROFILE_CONNECTION_2G3G4G} to determine what subscription to control.
@@ -366,8 +368,12 @@ public final class ConnectionSettings implements Parcelable {
                 break;
             case PROFILE_CONNECTION_WIFIAP:
                 currentState = wm.isWifiApEnabled();
+                Log.d(TAG, "hit profile connection wifiap");
+                Log.d(TAG, "wifiap curstate="+ currentState);
+                Log.d(TAG, "wifiap forcestate="+ forcedState);
                 if (currentState != forcedState) {
                     // ConnectivityManager will disable wifi
+                    Log.d(TAG, "hit unequal state. forced state is "+ forcedState);
                     if (forcedState) {
                         cm.startTethering(ConnectivityManager.TETHERING_WIFI,
                                 false, new OnStartTetheringCallback());
